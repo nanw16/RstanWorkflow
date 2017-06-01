@@ -1,0 +1,1 @@
+This folder contains the R code for model evaluation: comparison between the samples drawn from posterior distribution and the true parameters.
