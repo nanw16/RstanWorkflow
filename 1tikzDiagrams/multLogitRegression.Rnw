@@ -1,0 +1,51 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,bayesnet}
+\usepackage{graphicx} % allow embedded images
+  \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+  \graphicspath{{graphics/}} % set of paths to search for images
+\usepackage{amsmath}  % extended mathematics
+\usepackage{amssymb}
+\usepackage{pgf}
+
+%logistic regression - single predictor
+
+\begin{document}
+
+\tikz{ %
+  \tikzstyle{latent} = [ellipse,fill=blue!15,draw=black,inner sep=1pt,
+                        minimum width = 2.75cm,minimum height = 1.1cm, align = center,
+                        font=\fontsize{10}{10}\selectfont, node distance=1];
+  \tikzstyle{observed} = [latent, fill = blue!35];
+  \tikzstyle{det} = [latent, double];
+
+    \node[observed]                   (Data)
+      {Data\\\scriptsize{$y_{n} \thicksim \textrm{Categorical}(p_{n1},\ldots,p_{nk})^{**}$}};
+    \node[det, above=of Data]        (logistic)
+      {Probability$^*$\\\footnotesize{$p_{nk} = \frac{\textrm{exp}(\sum_{D} x_{nd} \beta_{dk})}
+      {\sum_K \textrm{exp}(\sum_{D} x_{nd} \beta_{dk})}$}};
+    \node[observed, above=of logistic]    (Predictor)
+      {Predictor\\$x_{nd}$};
+    \node[latent, right=of Predictor, xshift = 1.5cm]      (beta)
+      {Slope Coeff\\$\beta_{dk} \thicksim \mathcal{N}(0,5)$};
+    \node[right=of logistic, xshift = 1cm, yshift = 1cm] (phant1) {\phantom{test}};
+    \node[right=of logistic, xshift = -4.4cm] (phant2) {\phantom{Slope Coeff\\$\beta_{d,k}$}};
+    \node[right, xshift = 1.25cm, yshift = -1.5cm,  text width = 3cm, font = \tiny] at (logistic.east) {$^{*}$ Model assumes that the log probability of seeing one category can be modelled using a linear predictor. To guarantee that the probability of all outcomes sums to one, a normalizing constant is used (i.e. the denominator in the expression for $p_n$. In Stan, the softmax function is used to accomplish this.};
+
+    \plate[inner sep = 0.25cm]  {obsPlate}   {(Data) (logistic) (Predictor)}    {Observation $n$};
+    \plate[] {predPlate} {(beta) (Predictor)} {Predictor $d$};
+    \plate[inner sep = 0.25cm] {outcomePlate} {(beta) (phant1)} {Outcome $k$};
+    \plate[] {outcomePlate2} {(logistic) (phant2)} {Outcome $k$};
+    
+    \coordinate (out1) at (outcomePlate.south);
+    \coordinate (out2) at (outcomePlate2.east);
+
+    \edge {logistic}    {Data};
+    \edge {beta} {logistic};
+    \edge {Predictor} {logistic};
+    
+    \draw[densely dotted] (out1)--(out2)
+    
+  }
+
+\end{document}

@@ -1,0 +1,45 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,bayesnet}
+\usepackage{graphicx} % allow embedded images
+  \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+  \graphicspath{{graphics/}} % set of paths to search for images
+\usepackage{amsmath}  % extended mathematics
+\usepackage{amssymb}
+\usepackage{pgf}
+
+%linear regression - single predictor
+
+\begin{document}
+
+\tikz{ %
+  \tikzstyle{latent} = [ellipse,fill=blue!15,draw=black,inner sep=1pt,
+                        minimum width = 2.75cm,minimum height = 1.1cm, align = center,
+                        font=\fontsize{10}{10}\selectfont, node distance=1];
+  \tikzstyle{observed} = [latent, fill = blue!35];
+  \tikzstyle{det} = [latent, double];
+
+    \node[observed]                   (Data)
+      {Data\\$y_{n} \thicksim \mathcal{N}(\mu_{n}, \sigma)$};
+    \node[det, above=of Data]        (Mean)
+      {Mean\\$\mu_n = \alpha + \beta x_n$};
+    \node[latent, left=of Mean]       (StdDev)
+      {Std.Dev\\$\sigma$};
+    \node[observed, above=of Mean]    (Predictor)
+      {Predictor\\$x_n$};
+    \node[latent, left=of Predictor] (alpha)
+      {Intercept\\$\alpha$};
+    \node[latent, right=of Predictor]      (beta)
+      {Slope Coeff\\$\beta$};
+      
+    \plate[]  {obsPlate}   {(Data) (Mean) (Predictor)}    {Observation $n$};
+    
+    \edge {Mean}    {Data};
+    \edge {StdDev}  {Data};
+    \edge {alpha}   {Mean};
+    \edge {beta}    {Mean};
+    \edge {Predictor} {Mean}
+
+  }
+
+\end{document}
