@@ -1,0 +1,54 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,bayesnet}
+\usepackage{graphicx} % allow embedded images
+  \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+  \graphicspath{{graphics/}} % set of paths to search for images
+\usepackage{amsmath}  % extended mathematics
+\usepackage{amssymb}
+\usepackage{pgf}
+
+%logistic regression - single predictor
+
+\begin{document}
+
+\tikz{ %
+  \tikzstyle{latent} = [ellipse,fill=blue!15,draw=black,inner sep=1pt,
+                        minimum width = 2.75cm,minimum height = 1.1cm, align = center,
+                        font=\fontsize{10}{10}\selectfont, node distance=1];
+  \tikzstyle{observed} = [latent, fill = blue!35];
+  \tikzstyle{det} = [latent, double];
+
+    \node[observed]                   (Data)
+      {Data\\$y_{n} \thicksim \footnotesize{\textrm{Bernoulli}(p_n)^{**}}$};
+    \node[det, above=of Data]        (logistic)
+      {Probability\\\footnotesize{$p_n = \textrm{logit}^{-1} (\sum_D \beta_{\ell_n d} x_{nd} )$}};
+    \node[observed, above=of logistic, xshift = 1.25cm]    (Predictor)
+      {Predictor\\$x_{nd}$};
+    \node[latent, right=of Predictor, xshift = -0.5cm]      (beta)
+      {Slope Coeff\\$\beta_{\ell d} \thicksim \mathcal{N}(\mu_d, \sigma_d)$};
+    \node[observed, left=of Predictor, xshift = 0.5cm]      (level)
+      {Level\\$\ell_n$};
+    \node[latent, above=of beta]                            (mean)
+      {Mean\\$\mu_d \thicksim \mathcal{N}(0,100)$};
+    \node[latent, above=of Predictor]                            (stdDev)
+      {Std. Dev.\\$\sigma_d$};
+      
+    \node[below=of beta, xshift = 1.55cm, yshift = 0.65cm] (phant1) {\phantom{test}};
+    \node[above=of beta, xshift = 0cm, yshift = -1.33cm] (phant2) {\phantom{test}};  
+      
+    \node[right, xshift = 1cm, text width = 3.5cm, font = \tiny] at (Data.east) {Note:  See Stan manual for tips on achieving computational speed and stability.};
+      
+    \plate[inner sep = 0.25cm]  {obsPlate}   {(Data) (logistic) (Predictor) (level)}    {Observation $n$};
+    \plate[]  {levelPlate}   {(beta) (phant1) (phant2)}                     {Level $\ell$};
+    \plate[]  {predPlate}     {(beta) (Predictor) (mean) (stdDev)}        {Predictor $d$};
+    
+    \edge {logistic}    {Data};
+    \edge {beta} {logistic};
+    \edge {Predictor} {logistic};
+    \edge {level} {logistic};
+    \edge {mean} {beta};
+    \edge {stdDev} {beta};
+  }
+
+\end{document}

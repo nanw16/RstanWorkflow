@@ -1,0 +1,47 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,bayesnet}
+\usepackage{graphicx} % allow embedded images
+  \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+  \graphicspath{{graphics/}} % set of paths to search for images
+\usepackage{amsmath}  % extended mathematics
+\usepackage{amssymb}
+\usepackage{pgf}
+
+%logistic regression - single predictor
+
+\begin{document}
+
+\tikz{ %
+  \tikzstyle{latent} = [ellipse,fill=blue!15,draw=black,inner sep=1pt,
+                        minimum width = 2.75cm,minimum height = 1.1cm, align = center,
+                        font=\fontsize{10}{10}\selectfont, node distance=1];
+  \tikzstyle{observed} = [latent, fill = blue!35];
+  \tikzstyle{det} = [latent, double];
+
+    \node[det, font = \scriptsize, fill = blue!35]        (data)
+      {Data\\\scriptsize{$y_{n} \thicksim \textrm{Categorical}(p_{n1},\ldots,p_{nk})^{**}$}};
+    \node[det, above=of data]        (probability)
+      {Probability\\\footnotesize{$p_{nk} = P_{nk} - P_{n(k-1)}$}};
+    \node[det, above=of probability]                  (cumProb)
+      {Cumul. Prob\\\footnotesize{$P_{nk} = \textrm{logit}^{-1} (c_k - \sum_D \beta_d x_{nd})$}};
+    \node[observed, above=of cumProb]              (Predictor)
+      {Predictor\\$x_{nd}$};
+    \node[latent, right=of Predictor, xshift = 1.5cm]      (beta)
+      {Slope Coeff\\$\beta_{d}$};
+    \node[latent, below=of beta]           (cutoff)
+      {Cutoffs\\$c_k$};
+      
+    \node[right, xshift = 0.5cm,  text width = 3.05cm, font = \scriptsize] at (data.east) {Notes: $c_K = \infty, P_{n0}=0, c_{k} < c_{k+1}$.  In Stan, use the ordered\_logistic distribution which takes linear predictors and cutoffs as parameters.};
+      
+    \plate[inner sep = 0.25cm]  {obsPlate}   {(data) (probability) (cumProb) (Predictor)}    {Observation $n$};
+    \plate[] {predPlate} {(beta) (Predictor)} {Predictor $d$};
+    \plate[] {outcomePlate} {(cutoff) (cumProb) (probability)} {Outcome $k$};
+    
+    \edge {Predictor} {cumProb};
+    \edge {beta} {cumProb};
+    \edge {cutoff} {cumProb};
+    \edge {cumProb} {probability};
+    \edge {probability} {data};
+}
+\end{document}
