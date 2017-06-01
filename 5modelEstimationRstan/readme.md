@@ -1,0 +1,1 @@
+This folder contains the R code for model estimation with Rstan.
