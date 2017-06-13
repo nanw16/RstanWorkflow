@@ -1,0 +1,46 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\setlength\parindent{0pt}
+\begin{document}
+
+\title{Probability Model For A One Predictor Probit Regression Model}
+\author{Nan Wu \\ nanw@udel.edu}
+\date{}
+\maketitle
+
+\section{Probit Regression Model}
+
+The probit regression model is given as
+\begin{align}
+\begin{split}
+  y &\sim \mathrm{Bernoulli} \left( p\right) \\
+  p &=\Phi \left(\alpha + x\beta \right)=\int_{-\infty}^{\alpha+x\beta}\frac{1}{\sqrt{2\pi}}exp\left(-\frac{y^2}{2}\right)\,dy
+\end{split}
+\end{align}
+
+where $y \in \left\{0,1\right\}$, $x\in \mathbb{R}^N$, $\alpha \in \mathbb{R}$, and $\beta \in \mathbb{R}$.
+
+In this model, outcome $y$ is binary, $x$ is the predictor, $\alpha$ is the intercept, $\beta$ is the slope coefficient.
+
+\section{Probability Model}
+
+Stan allows us to use improper priors if we don't have any prior knowledge about the parameters. We can therefore start with a simple model by assuming improper priors for $\alpha$ and $\beta$.
+\begin{align*}
+\alpha &\sim \mathrm{Uniform}\left( -\infty,\infty \right) \\
+\beta &\sim \mathrm{Uniform}\left( -\infty,\infty \right)
+\end{align*}
+
+Putting it all together, the probability model for the single predictor probit regression model is:
+\begin{align*}
+y_n &\sim \mathrm{Bernoulli} \left( p_n\right) \\
+p_n &=\Phi \left( \alpha + x_n\beta \right) \\
+\alpha &\sim \mathrm{Uniform}\left( -\infty,\infty \right) \\
+\beta &\sim \mathrm{Uniform}\left( -\infty,\infty \right)
+\end{align*}
+
+\end{document}
