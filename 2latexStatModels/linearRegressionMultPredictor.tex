@@ -1,0 +1,45 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\setlength\parindent{0pt}
+\begin{document}
+
+\title{Probability Model For A Multi-Predictor Linear Regression Model}
+\author{Nan Wu \\ nanw@udel.edu}
+\date{}
+\maketitle
+
+\section{Linear Regression Model}
+
+The linear regression model is given as
+\begin{equation}
+y=\alpha+X\beta+\epsilon
+\end{equation}
+
+where $y\in \mathbb{R}^N$, $X\in \mathbb{R}^{N \times P}$, $\alpha \in \mathbb{R}$, $\beta \in \mathbb{R}^P$, $\epsilon \in \mathbb{R}^N$, and $\epsilon \sim \mathrm{Normal}\left( 0,\sigma \right)$.
+
+In this model, $X$ is the predictor matrix, $y$ is the outcome, $\alpha$ is the intercept, $\beta$ is the coefficient vector associated with predictors, $\epsilon$ is the residual.
+
+\section{Probability Model}
+
+Stan allows us to use improper priors if we don't have any prior knowledge about the parameters. We can therefore start with a simple model by assuming improper priors for $\alpha$, $\beta$ and $\sigma$:
+\begin{align*}
+\alpha &\sim \mathrm{Uniform}\left( -\infty,\infty \right) \\
+\beta_p &\sim \mathrm{Uniform}\left( -\infty,\infty \right), p=1,\cdots,P \\
+\sigma &\sim \mathrm{Uniform}\left( 0,\infty \right)
+\end{align*}
+
+Putting it all together, the probability model for the multi-predictor linear regression model is:
+\begin{align*}
+y_n &\sim \mathrm{Normal}\left(\mu_n, \sigma \right) \\
+\mu_n &= \alpha + \sum\limits_{p=1}^P X_{n,p}\beta_p \\
+\alpha &\sim \mathrm{Uniform}\left( -\infty,\infty \right) \\
+\beta_p &\sim \mathrm{Uniform}\left( -\infty,\infty \right), p=1,\cdots,P \\
+\sigma &\sim \mathrm{Uniform}\left( 0,\infty \right)
+\end{align*}
+
+\end{document}
