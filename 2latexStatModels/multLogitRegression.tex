@@ -1,0 +1,44 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\setlength\parindent{0pt}
+\begin{document}
+
+\title{Probability Model For A Multi-Logit Regression Model}
+\author{Nan Wu \\ nanw@udel.edu}
+\date{}
+\maketitle
+
+\section{Multi-Logit Regression Model}
+
+The multi-logit regression model is given as
+\begin{align}
+\begin{split}
+  y_n &\sim \mathrm{Categorical} \left(\mathbf{p}\right) \\
+  \mathbf{p} &=\left(p_1,\ldots,p_K \right)\\
+  p_k &= \frac{\exp\left( \sum\limits_{p=0}^P X_{n,p}\beta_{p,k} \right)}{\sum \limits_{k=1}^K \exp \left( \sum\limits_{p=0}^P X_{n,p}\beta_{p,k} \right)}
+\end{split}
+\end{align}
+
+where $y_n$ has $K$ discrete outcomes, say $y_n \in \left\{1,\ldots,K\right\}$, $X\in \mathbb{R}^{N \times (P+1)}$ is the predictor matrix with the entries in the first column all being one, and $\beta \in \mathbb{R}^{(P+1) \times K}$ is the coefficient matrix.
+
+\section{Probability Model}
+
+Stan allows us to use improper priors if we don't have any prior knowledge about the parameters. As an example, we could assume the following priors for $\beta$:
+\begin{align*}
+\beta_{p,k} \sim \mathrm{Normal}\left( 0,5 \right)
+\end{align*}
+
+Putting it all together, the probability model for the multi-predictor logistic regression model is:
+\begin{align*}
+  y_n &\sim \mathrm{Categorical} \left(\mathbf{p}\right) \\
+  \mathbf{p} &=\left(p_1,\ldots,p_K \right) \\
+  p_k &= \frac{\exp\left( \sum\limits_{p=0}^P X_{n,p}\beta_{p,k} \right)}{\sum \limits_{k=1}^K \exp \left( \sum\limits_{p=0}^P X_{n,p}\beta_{p,k} \right)} \\
+  \beta_{p,k} &\sim \mathrm{Normal}\left( 0,5 \right)
+\end{align*}
+
+\end{document}
