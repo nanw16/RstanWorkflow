@@ -1,0 +1,99 @@
+\documentclass{standalone}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows,bayesnet}
+\usepackage{graphicx} % allow embedded images
+  \setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+  \graphicspath{{graphics/}} % set of paths to search for images
+\usepackage{amsmath}  % extended mathematics
+\usepackage{amssymb}
+\usepackage{pgf}
+
+%linear regression - multiple predictors
+
+\begin{document}
+
+\tikz{ %
+  \tikzstyle{latent} = [ellipse,fill=blue!15,draw=black,inner sep=1pt,
+                        minimum width = 2.75cm,minimum height = 1.1cm, align = center,
+                        font=\fontsize{10}{10}\selectfont, node distance=1];
+  \tikzstyle{observed} = [latent, fill = blue!35];
+  \tikzstyle{det} = [latent, double];
+
+    \node[observed]                   (Data)
+      {Data$[K \times 1]$\\$\vec{y_{n}} \thicksim \textrm{MultiNorm}(\vec{\mu}, \Sigma)$};
+    \node[det, above=of Data]        (Mean)
+      {Mean$[K \times 1]$\\$\vec{\mu_n} = \beta \vec{x_n} $};
+    \node[observed, above=of Mean, xshift = 0cm, yshift = 1cm]      (predictor)
+      {Predictor$[J \times 1]$\\$\vec{x_{n}}$};
+    \node[latent, right=of predictor, xshift = 0.5cm, yshift = -0.35cm]      (coefficient)
+      {Coefficient$[K \times J]$\\$\mathbf{\beta}$};
+      
+    % \node[latent, right=of coefficient, font = \scriptsize, xshift = 0cm, yshift = 1.25cm]      (coefVector)
+    %   {Coef. Vector$[K]$\\$\vec{\beta_{j}} \thicksim \textrm{MultiNorm}(\vec{\mu'_j}, \Sigma)$};
+    % \node[observed, above=of Mean, xshift = -1.65cm]   (group)
+    %  {Group\\$j_n$};
+    % \node[det, above=of coefVector, font = \scriptsize]        (groupMean)
+    %   {Prior Mean for $\vec{\beta_j}$\\$\vec{\mu'_{j}} = (\mu'_{j1},\ldots,\mu'_{jK})^T $};
+    % \node[observed, above=of groupMean, font = \scriptsize]      (grpPredictor)
+    %   {Grp Lvl Predictor\\$u_{\ell j}$};
+    % \node[latent, above=of predictor, yshift = 3.35cm, font = \scriptsize]      (groupCoefficient)
+    %   {Group Lvl Coeff.\\$\gamma_{\ell k} \thicksim \mathcal{N}(0,5)$};
+    % \node[above=of groupCoefficient, yshift = -1.33cm]      (phant1)
+    %  {\phantom{test}};
+    % \node[det,above=of coefficient, font = \scriptsize, yshift = 1.25cm]         (priorMeanOnk)
+    %   {Prior Mean for $\beta_{jk}$\\$\mu'_{jk} = \sum_L \gamma_{\ell k} u_{\ell j}$};
+    % \node[observed, right=of groupMean, font = \scriptsize]      (groupPredictor)
+    %   {Grp Lvl Predictors\\$u_{\ell j}$};
+    % \node[above=of groupCoefficient, yshift = -1.33cm]      (phant2)
+    %   {\phantom{test}};
+    \node[det, right=of Data, font = \scriptsize, xshift = 0.75cm]       (covarMatrix)
+      {Covariance$[K\times K]$\\$\Sigma$};
+    % \node[latent, right=of covarMatrix, font = \footnotesize, xshift = 0cm]         (Omega)
+    %   {Correlation$[K\times K]$\\$\Omega \thicksim \textrm{LKJCorr}(2)$};
+    % \node[latent, above=of Omega, font = \footnotesize,xshift = 0cm]                       (tau)
+    %   {Prior Std Dev for $\beta_{\cdot k}$\\$\tau_k \thicksim \textrm{Cauchy}(0,2.5)$};
+    \node[below=of Data, yshift = 1cm]      (phant2)
+      {\phantom{test}};
+    \node[above=of Mean, yshift = 0.2cm]      (phant3)
+      {\phantom{test}};
+    \node[right=of coefficient, xshift = -1cm]      (phant4)
+     {\phantom{test}};
+    % \node[above=of Omega, yshift = 0cm, xshift = -3cm]      (phant5)
+    %  {\phantom{test}};
+     
+    \plate[]  {obsPlate}   {(Data) (Mean)  }    {Outcome $k$};
+    \plate[]  {obsPlate2}   {(coefficient)  }    {Outcome $k$};
+    \plate[inner sep = 0.25cm]  {obsPlate3}   {(Data) (Mean) (predictor) (phant2)}    {Observation $n$}
+    \plate[] {KbyK}       {(covarMatrix)}                 {Covariance Error Structure $k \times k$}
+    \plate[]  {predPlate}   {(coefficient) (predictor) (phant3) (phant4)}             {Predictor $j$};
+    % \plate[]  {groupPlate}   {(coefficient) (coefVector) (groupMean) (grpPredictor) (priorMeanOnk) (phant3) (phant4)}             {Group $j$};
+    % \plate[]  {groupPredPlate}  {(grpPredictor) (groupCoefficient) (phant2)}        {Group Level Predictor $\ell$};
+    % % \plate[]  {predPlate2}   {(groupCoefficient) (phant2) (tau)}             {Individual Predictor $k$};
+
+    \edge {Mean}    {Data};
+    % \edge {StdDev}  {Data};
+    \edge {coefficient}  {Mean};
+    % \edge {group}   {Mean};
+    \edge {predictor} {Mean};
+    % \edge {coefVector} {coefficient};
+    % \edge {groupMean} {coefVector};
+    % \edge {grpPredictor}  {priorMeanOnk};
+    % \edge {groupCoefficient}  {priorMeanOnk};
+    % \edge {priorMeanOnk}    {groupMean};
+    \edge {covarMatrix}    {Data};
+    % \edge {tau}       {covarMatrix};
+    % \edge {Omega}     {covarMatrix};
+
+    \coordinate (out1) at (obsPlate.east);
+    \coordinate (out2) at (obsPlate2.south);
+    \coordinate (out3) at (KbyK.north);
+
+    \draw[densely dotted] (out1)--(out2);
+    \draw[densely dotted] (out2)--(out3);
+    \draw[densely dotted] (out1)--(out3);
+      % \draw[] (tau)--(out1);
+      % \edge {out1}  {covarMatrix};
+
+  }
+
+\end{document}
