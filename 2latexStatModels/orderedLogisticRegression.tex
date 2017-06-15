@@ -1,0 +1,81 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.1in}
+%\setlength{\parskip}{0.1\baselineskip}
+
+\def\eqa{\left(c_k - \sum \limits_{p=1}^P X_{n,p}\beta_p \right)}
+\def\eqb{\left(c_{k-1} - \sum \limits_{p=1}^P X_{n,p}\beta_p \right)}
+
+\begin{document}
+
+\title{Probability Model For An Ordered Logistic Regression Model}
+\author{Nan Wu \\ nanw@udel.edu}
+\date{}
+\maketitle
+
+\section{Ordered Logistic Regression Model}
+
+The ordered logistic regression is a regression model for ordinal dependent variables. Assume the observable dependent variable is $y$, which is a function of another unobserved, continuous latent variable $y^*$ in the ordered logit model as below.
+
+\begin{equation*}
+  y= \begin{cases}
+    1, & \text{if $y^* \leq c_1$},\\
+    2, & \text{if $c_1 < y^* \leq c_2$},\\
+    \vdots \\
+    K, & \text{if $c_{K-1} < y^*$}
+  \end{cases}
+\end{equation*}
+
+And
+\begin{align*}
+  y^* &= X\beta + \epsilon \\
+  \epsilon &\sim \mathrm{Logistic}\left(0,1\right)
+\end{align*}
+
+where $y_n \in \left \{1,\ldots, K\right \}, n=1,\ldots,N$; $y^* \in \mathbb{R}^N$; $X\in \mathbb{R}^{N \times P}$ is the predictor matrix, where $N$ is the number of observations, and $D$ is the number of predictors; $\beta \in \mathbb{R}^P$ is the coefficient vector; and $c \in \mathbb{R}^{K-1}$  is a sequence of cutpoints sorted so that $c_k<c_{k+1}$.
+
+Therefore,
+\begin{gather*}
+  \left. y^* \right|\beta \sim \mathrm{Logistic}\left(X\beta, 1\right)\\
+  \mathrm{Pr}\left(y^*_n \leq c_k\right)=\frac{1}{1+\exp \left(-\eqa \right)}, \ n=1,\ldots,N
+\end{gather*}
+
+where
+\begin{equation}
+  \frac{1}{1+\exp \left(- \eqa \right)}= \mathrm{logit}^{-1}\eqa
+\end{equation}
+
+Assuming $c_0=-\infty$, $c_K=\infty$, $\mathrm{logit}^{-1}\left(-\infty\right)=0$, and $\mathrm{logit}^{-1}\left(\infty\right)=1$, the probability of $y_n$ is therefore computed as
+\begin{align*}
+ \mathrm{Pr}\left(y_n=k\right)&=\mathrm{Pr}\left(c_{k-1}<y^*_n\leq c_k\right)\\
+ &= \mathrm{Pr}\left(y^*_n\leq c_k \right) - \mathrm{Pr}\left(y^*_n\leq c_{k-1} \right) \\
+ &= \mathrm{logit}^{-1}\eqa - \mathrm{logit}^{-1}\eqb
+\end{align*}
+where $n=1,\ldots, N$, and $k=1, \ldots, K$.
+
+\section{Probability Model}
+
+$c$ and $\beta$ are parameters in the ordered logit model. Stan allows us to use improper priors if we don't have any prior knowledge about the parameters. We can therefore start with a simple model by assuming improper priors for $c$ and $\beta$.
+\begin{align*}
+  c_k &\sim \mathrm{Uniform}\left(-\infty, \infty \right), \ c_k \leq c_{k+1}\\
+  \beta_p &\sim \mathrm{Uniform}\left(-\infty, \infty \right)\\
+  k &=1,\ldots,K-1, \  p=1,\ldots,P
+\end{align*}
+
+Putting it all together, the probability model for the ordered logistic regression model is:
+\begin{align*}
+  y_n &\sim \mathrm{Categorical} \left(\mathbf{p}_n\right) \\
+  \mathbf{p}_n &=\left(p_{n1},\ldots,p_{nK} \right) \\
+  p_{nk} &= \mathrm{logit}^{-1}\eqa - \mathrm{logit}^{-1}\eqb \\
+  \beta_p &\sim \mathrm{Uniform}\left(-\infty, \infty \right)\\
+  c_k &\sim \mathrm{Uniform}\left(-\infty, \infty \right), \ k=1,\ldots,K-1 \\
+  c_0 &= -\infty, \ c_K = \infty
+\end{align*}
+
+\end{document}
