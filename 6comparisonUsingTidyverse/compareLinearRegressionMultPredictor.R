@@ -1,4 +1,4 @@
-# Comparing the estiamted parameter distribution with the know parameter
+# Comparing the estiamted parameter distribution with the known parameter
 # for the multi-predictor linear regression model
 # Author: Nan Wu
 
