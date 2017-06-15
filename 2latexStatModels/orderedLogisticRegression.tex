@@ -21,7 +21,7 @@
 
 \section{Ordered Logistic Regression Model}
 
-The ordered logistic regression is a regression model for ordinal dependent variables. Assume the observable dependent variable is $y$, which is a function of another unobserved, continuous latent variable $y^*$ in the ordered logit model as below.
+The ordered logistic regression is a regression model for ordinal dependent variables. Assume the observable dependent variable is $y$, which is a function of another unobserved, continuous latent variable $y^*$ in the ordered logit model described as below.
 
 \begin{equation*}
   y= \begin{cases}
@@ -75,7 +75,8 @@ Putting it all together, the probability model for the ordered logistic regressi
   p_{nk} &= \mathrm{logit}^{-1}\eqa - \mathrm{logit}^{-1}\eqb \\
   \beta_p &\sim \mathrm{Uniform}\left(-\infty, \infty \right)\\
   c_k &\sim \mathrm{Uniform}\left(-\infty, \infty \right), \ k=1,\ldots,K-1 \\
-  c_0 &= -\infty, \ c_K = \infty
+  c_0 &= -\infty, \ c_K = \infty \\
+  c_k &< c_{k+1}, \ k=1,\ldots,K-1
 \end{align*}
 
 \end{document}
