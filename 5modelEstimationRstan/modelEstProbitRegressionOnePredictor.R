@@ -27,15 +27,13 @@ print(fitProbitRegModel)
 # traceplot(fitProbitRegModel, pars = c("alpha", "beta", "sigma"))
 
 # Extract samples for each parameter from posterior estimations
-postSamples = as.data.frame(fitLogitRegModel) %>%
+postSamples = as.data.frame(fitProbitRegModel) %>%
   select(-lp__) %>%
   dplyr::mutate(sampleNum = row_number()) %>%
   tbl_df() %>%
   gather("varName", "value", -sampleNum)
 
 modelDir <- "C:/Nan Wu/study/Udel/PHD/summer paper/RstanWorkflow/5modelEstimationRstan"
-# save(fitLogitRegModel, 
-#      file = file.path(modelDir, "modelLinearRegressionOnePredictor.Rda"))
 
 # Save the posterior samples for the parameters to the .csv file
 write.csv(postSamples, file.path(modelDir, "postProbitRegressionOnePredictor.csv"),
