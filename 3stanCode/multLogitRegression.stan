@@ -5,10 +5,10 @@
 data{
   int<lower=1> N; // number of observations
   int<lower=1> P; // number of predictors
-  int<lower=1> K; // number of classes for outcome
+  int<lower=2> K; // number of classes for outcome
   matrix[N,P] x; // covariate matrix
   //vector[P] x[N]; // covariate matrix, might be confusing when supply data in R
-  int y[N]; // outcome vector
+  int<lower=1,upper=K> y[N]; // outcome vector
 }
 parameters{
   matrix[P,K] beta; // the regression coefficient

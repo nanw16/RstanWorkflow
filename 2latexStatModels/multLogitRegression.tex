@@ -35,9 +35,9 @@ Stan allows us to use improper priors if we don't have any prior knowledge about
 
 Putting it all together, the probability model for the multi-predictor logistic regression model is:
 \begin{align*}
-  y_n &\sim \mathrm{Categorical} \left(\mathbf{p}\right) \\
-  \mathbf{p} &=\left(p_1,\ldots,p_K \right) \\
-  p_k &= \frac{\exp\left( \sum\limits_{p=0}^P X_{n,p}\beta_{p,k} \right)}{\sum \limits_{k=1}^K \exp \left( \sum\limits_{p=0}^P X_{n,p}\beta_{p,k} \right)} \\
+  y_n &\sim \mathrm{Categorical} \left(\mathbf{p}_n\right) \\
+  \mathbf{p}_n &=\left(p_{n1},\ldots,p_{nK} \right) \\
+  p_{nk} &= \frac{\exp\left( \sum\limits_{p=0}^P X_{n,p}\beta_{p,k} \right)}{\sum \limits_{k=1}^K \exp \left( \sum\limits_{p=0}^P X_{n,p}\beta_{p,k} \right)} \\
   \beta_{p,k} &\sim \mathrm{Normal}\left( 0,5 \right)
 \end{align*}
 
