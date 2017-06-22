@@ -48,16 +48,4 @@ ggplot(data = postSamples, aes(x = value)) +
   ggtitle("Estimated posterior distribution") +
   theme(plot.title = element_text(hjust = 0.5))
 
-# ggplot(subset(postSamples, grepl("sigma", postSamples$varName)), aes(x = value)) + 
-#   geom_histogram(color = "black", fill = "sky blue") + 
-#   facet_wrap(~varName, scales = "free_x", ncol = 3) +
-#   ggtitle("Estimated posterior distribution for sigma") +
-#   theme(plot.title = element_text(hjust = 0.5))
-# 
-# ggplot(subset(postSamples, grepl("beta", postSamples$varName)), aes(x = value)) + 
-#   geom_histogram(color = "black", fill = "sky blue") + 
-#   facet_wrap(~varName, scales = "free_x", ncol = 6) +
-#   ggtitle("Estimated posterior distribution for beta") +
-#   theme(plot.title = element_text(hjust = 0.5))
-
 # We may plot smoothed density function as well using geom_desity()
