@@ -51,10 +51,10 @@ knownPar <- data.frame(varName = c(varName_mu, varName_sigma, varName_beta), tru
 
 # specify the directory to store the data file and parameter file
 directory <- "C:/Nan Wu/study/Udel/PHD/summer paper/RstanWorkflow/4simulatedDataGenInR"
-# Write data to dataMultLogitRegression.csv.csv
+# Write data to dataHierarchicalLogisticRegression.csv
 write.csv(simData, file.path(directory,"dataHierarchicalLogisticRegression.csv"),
           row.names = FALSE)
 
-# Write parameter to parMultLogitRegression.csv
+# Write parameter to parHierarchicalLogisticRegression.csv
 write.csv(knownPar, file.path(directory,"parHierarchicalLogisticRegression.csv"),
           row.names = FALSE)
