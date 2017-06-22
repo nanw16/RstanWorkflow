@@ -1,0 +1,58 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.1in}
+%\setlength{\parskip}{0.1\baselineskip}
+
+\def\eqa{\left(\sum \limits_{d=1}^D X_{n,d}\beta_{l_n,d} \right)}
+
+\begin{document}
+
+\title{Probability Model For A Hierarchical Logistic Regression Model}
+\author{Nan Wu \\ nanw@udel.edu}
+\date{}
+\maketitle
+
+We consider a two level hierarchical logistic regression model in which the data are grouped into $L$ distinct categories. Each category $l$ gets its own coefficient vector $\beta_l$, and these coefficients are generated from the single set of hyperparameters.
+
+\section{Hierarchical Logistic Regression Model}
+
+The two level hierarchical logistic regression model is described as below:
+\begin{align*}
+  y_n &\sim \mathrm{Bernoulli}\left(p_n\right) \\
+  p_n &= \mathrm{logit}^{-1}\eqa
+\end{align*}
+
+where $y_n \in \left \{0,1 \right\}, n=1,\ldots,N$; $X\in \mathbb{R}^{N \times D}$ is the predictor matrix, where $N$ is the number of observations, and $D$ is the number of predictors; $l_n\in \left\{1,\ldots,L \right\}$ is the category associated with each binary outcome $y_n$; $\beta_l \in \mathbb{R}^D$ is the coefficient vector for category $l$.
+
+\section{Probability Model}
+
+$\beta_{l,d}$ are the parameters for this hierarchical logistic regression model, where $l\in\left\{1,\ldots,L\right\}, d=1,\ldots,L$. Assume $\beta_{l,d}$ are drawn from a single set of hyperparameters for all categories $l$ as below:
+\begin{align*}
+  \beta_{l,d} &\sim \mathrm{Normal\left(\mu_d, \sigma_d \right)}\\
+  d &= 1, \ldots, D
+\end{align*}
+
+Then we need to further specify the priors for the hyperparameters $\mu_d$ and $\sigma_d$. For simulation purpose, we use the following reasonable weakly informative priors for the location and scale parameters.
+\begin{align*}
+  \mu &\sim \mathrm{Normal}\left(0, 100 \right) \\
+  \sigma &\sim \mathrm{Gamma}\left(2, 0.1\right)
+\end{align*}
+where $0.1$ is the rate parameter for gamma distribution.
+
+Putting it all together, we have the probability model for this two level hierarchical logistic regression model as:
+\begin{align*}
+  y_n &\sim \mathrm{Bernoulli}\left(p_n\right) \\
+  p_n &= \mathrm{logit}^{-1}\eqa \\
+  \beta_{l,d} &\sim \mathrm{Normal\left(\mu_d, \sigma_d \right)}\\
+  \mu_d &\sim \mathrm{Normal}\left(0,100 \right)\\
+  \sigma_d &\sim \mathrm{Gamma}\left(2, 0.1\right)   
+\end{align*}
+where $l_n \in \left(1,\ldots,L \right)$, and $d=1,\ldots,D$.
+
+\end{document}
