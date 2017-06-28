@@ -23,7 +23,7 @@ if(K > 2){
 }
 # y <- vector(mode = "numeric", length = N)
 
-# draw samples from categorical distribution with probability p
+# draw samples from categorical distribution with probability pr
 y <- rcat(N, pr)
 # for(n in 1:N){
 #   y[n] <- rcat(1, p[n,])

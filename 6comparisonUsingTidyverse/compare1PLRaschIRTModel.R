@@ -1,5 +1,5 @@
 # Comparing the estiamted parameter distribution with the known parameter
-# for the one predictor logit regression model
+# for the 1PL IRT Model
 # Author: Nan Wu
 
 library("tidyverse")

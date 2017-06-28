@@ -1,5 +1,5 @@
 # Comparing the estiamted parameter distribution with the known parameter
-# for the multi-predictor logit regression model
+# for the hierarchical logistic regression model.
 # Author: Nan Wu
 
 library("tidyverse")

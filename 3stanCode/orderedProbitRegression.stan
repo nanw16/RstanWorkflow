@@ -1,4 +1,4 @@
-// stan program for the ordered logistic regression probability model
+// stan program for the ordered probit regression probability model
 // saved as orderedProbitRegression.stan
 // Author: Nan Wu
 
