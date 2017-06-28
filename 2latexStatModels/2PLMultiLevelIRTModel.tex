@@ -1,0 +1,56 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.1in}
+%\setlength{\parskip}{0.1\baselineskip}
+
+\def\eqa{\left(\sum \limits_{d=1}^D X_{n,d}\beta_{l_n,d} \right)}
+
+\begin{document}
+
+\title{Probability Model For A Multilevel 2PL Item-response Model}
+\author{Nan Wu \\ nanw@udel.edu}
+\date{}
+\maketitle
+
+\section{2PL Item-response Model}
+
+In the 1PL (Rasch) model, there is only parameter for questions. In the 2PL item-response model, we generalize the model by adding a discrimination parameter $\gamma$ to model how noisy a question is and by adding multilevel priors for student ability parameters, the question difficulty and discrimination parameters. 
+
+Suppose $J$ students are given a test with $K$ questions, with $y_{jk}=1$ if the response of student $j$ to question $k$ is correct, and  $y_{jk}=0$ otherwise. Assume that there are $N$ individual responses (observations) with each response $n$ associated with a person $j_n$ and a question $k_n$, where $j_n\in{1,\ldots, J}$, and $k_n\in{1, \ldots, K}$, and $\alpha_j$ is the ability of student $j$, $\beta_k$ is the difficulty of question $k$, $\gamma_k$ is the discrimination of question $k$, then the 2PL model can be written as
+\begin{equation} \label{eq:1}
+  \mathrm{Pr}\left(y_n=1\right)=\mathrm{logit}^{-1}\left(\gamma_{k_n}\left(\alpha_{j_n} - \beta_{k_n}\right)\right)
+\end{equation}
+
+\section{Probability Model}
+
+We assume the following multilevel priors for $\alpha_j$, $\beta_k$, and $\gamma_k$
+\begin{align*}
+  \alpha_j &\sim \mathrm{Normal}\left(0,1\right)\\
+  \beta_k &\sim \mathrm{Normal} \left(\mu_\beta, \sigma_\beta\right)\\
+  \mu_\beta &\sim \mathrm{Cauchy} \left(0, 5 \right) \\
+  \sigma_\beta &\sim \mathrm{Cauchy}_+ \left(0, 5 \right) \\
+  \gamma_k &\sim \mathrm{Lognormal} \left(0, \sigma_\gamma \right) \\
+  \sigma_\gamma &\sim \mathrm{Cauchy}_+ \left(0. 5 \right)
+\end{align*}
+where $j=1, \ldots, J$, and $k=1, \ldots, K$.
+
+Putting it all together, we have the probability model for this multilevel 2PL model as:
+\begin{align*}
+  y_n &\sim \mathrm{Bernoulli}\left(p_n\right) \\
+  p_n &= \mathrm{logit}^{-1}\left(\gamma_{k_n}\left(\alpha_{j_n}-\beta_{k_n}\right)\right) \\
+  \alpha_j &\sim \mathrm{Normal}\left(0,1 \right)\\
+  \beta_k &\sim \mathrm{Normal} \left(\mu_\beta, \sigma_\beta\right)\\
+  \mu_\beta &\sim \mathrm{Cauchy} \left(0, 5 \right) \\
+  \sigma_\beta &\sim \mathrm{Cauchy}_+ \left(0, 5 \right) \\
+  \gamma_k &\sim \mathrm{Lognormal} \left(0, \sigma_\gamma \right) \\
+  \sigma_\gamma &\sim \mathrm{Cauchy}_+ \left(0. 5 \right)
+\end{align*}
+where $j_n \in \left(1,\ldots,J \right)$, $k_n \in \left(1,\ldots,K \right)$, $j=1,\ldots, J$, and $k=1,\ldots,K$.
+
+\end{document}
