@@ -32,7 +32,7 @@ where $y_n \in \left \{0,1 \right\}, n=1,\ldots,N$; $X\in \mathbb{R}^{N \times D
 
 \section{Probability Model}
 
-$\beta_{l,d}$ are the parameters for this hierarchical logistic regression model, where $l\in\left\{1,\ldots,L\right\}, d=1,\ldots,L$. Assume $\beta_{l,d}$ are drawn from a single set of hyperparameters for all categories $l$ as below:
+$\beta_{l,d}$ are the parameters for this hierarchical logistic regression model, where $l\in\left\{1,\ldots,L\right\}, d=1,\ldots,D$. Assume $\beta_{l,d}$ are drawn from a single set of hyperparameters for all categories $l$ as below:
 \begin{align*}
   \beta_{l,d} &\sim \mathrm{Normal\left(\mu_d, \sigma_d \right)}\\
   d &= 1, \ldots, D
