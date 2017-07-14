@@ -1,0 +1,76 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.1in}
+%\setlength{\parskip}{0.1\baselineskip}
+
+\def\eqsuma{\sum \limits_{k=1}^K \beta_{j_nk} x_{nk}}
+\def\eqsumb{\sum \limits_{l=1}^L \gamma_l u_{jl}}
+
+\begin{document}
+
+\title{Probability Model For A Multivariate Hierarchical Linear Regression Model}
+\author{Nan Wu \\ nanw@udel.edu}
+\date{}
+\maketitle
+
+We consider a two level hierarchical linear regression model in which the data $y$ are organized into $J$ distinct groups. Each individual observation $y_n$ has a predictor row vector $x_n$ of size $K$ with $x_{n,1}=1$ to unify the notation. Each group $j$ gets its own coefficient vector $\beta_j$ of size $K$, which is predictable from its group-level predictors $u_j$ of size $L$.
+
+\section{Multivariate Hierarchical Linear Regression Model}
+
+The two level hierarchical linear regression model is described by the following two level regression equations.
+\begin{align}
+  y_n &= \eqsuma + e_n \\
+  \beta_j &= \eqsumb + \epsilon_j
+\end{align}
+
+where $x \in \mathbb{R}^{N \times K} $ is the individual-level predictor matrix; $u \in \mathbb{R}^{J \times L}$ is the group-level predictor matrix; $\beta_j \in \mathbb{R}^{1 \times K}$ is the individual-level coefficient vector by group; $\gamma_l \in \mathbb{R}^{1 \times K}$ is the group-level coefficient vector; $\epsilon_j \in \mathbb{R}^{1 \times K}$ is the group-level residual vector; $j_n \in \left\{1,\ldots,J \right\}$; $n=1,\ldots,N$; and $j=1,\ldots,J$.
+
+\section{Probability Model}
+
+Assume $e_n \sim \mathrm{Normal}(0, \sigma)$, and $\epsilon_j \sim \mathrm{MultiNormal}(0, \Sigma)$, then we have
+\begin{align}
+  y_n &\sim \mathrm{Normal}\left(\eqsuma,\sigma \right) \\
+  \beta_j &\sim \mathrm{MultiNormal}\left(\eqsumb, \Sigma \right)
+\end{align}
+Then we must give priors to $\sigma$, $\gamma$, and $\Sigma$.
+We may assume an improper prior for $\sigma$, and the following independent weakly informative prior for $\gamma$.
+\begin{equation*}
+  \gamma_{lk} \sim \mathrm{Normal} \left(0, 5 \right)
+\end{equation*}
+where $l=1,\ldots, L$, and $k=1,\ldots,K$.
+
+We decompose $\Sigma$ into a scale and a correlation matrix as below
+\begin{equation}
+  \Sigma = \text{diag\textunderscore matrix}\left(\tau\right)\Omega \text{diag\textunderscore matrix}\left(\tau\right)
+\end{equation}
+where $\Sigma \in \mathbb{R}^{K \times K}$ is a correlation matrix and $\tau \in \mathbb{R}^K$ is the vector of coefficient scales that
+\begin{gather*}
+  \tau_k = \sqrt{\Sigma_{kk}} \\
+  \Omega_{ij} = \frac{\Sigma_{ij}}{\tau_i \tau_j}
+\end{gather*}
+We may assume the following priors for $\tau$ and $\Omega$:
+\begin{align*}
+  \tau_k &\sim \mathrm{Cauchy}_+\left(0, 2.5\right) \\
+  \Omega &\sim \mathrm{LKJCorr}\left(2 \right)
+\end{align*}
+where $k=1,\ldots, K$.
+
+Putting it all together, we have the probability model for this two level hierarchical linear regression model as:
+\begin{align*}
+  y_n &\sim \mathrm{Normal}\left(\eqsuma,\sigma \right) \\
+  \sigma &\sim \mathrm{Uniform} \left(0, \infty \right) \\
+  \beta_j &\sim \mathrm{MultiNormal}\left(\eqsumb, \Sigma \right) \\
+  \gamma_{lk} &\sim \mathrm{Normal} \left(0, 5 \right) \\
+  \Sigma &= \text{diag\textunderscore matrix}\left(\tau\right)\Omega \text{diag\textunderscore matrix}\left(\tau\right)\\
+  \tau_k &\sim \mathrm{Cauchy}_+\left(0, 2.5\right) \\
+  \Omega &\sim \mathrm{LKJCorr}\left(2 \right)
+\end{align*}
+where $j_n \in \left\{1,\ldots,J \right\}$.
+
+\end{document}
