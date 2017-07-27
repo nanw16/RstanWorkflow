@@ -1,0 +1,38 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\setlength\parindent{0pt}
+\begin{document}
+
+\title{Probability Model For An Autoregressive Model}
+\author{Nan Wu \\ nanw@udel.edu}
+\date{}
+\maketitle
+
+\section{Autoregressive Model}
+
+Let $AR(K)$ denote an autoregressive model of order $K$, which is defined as
+\begin{equation}
+y_n = \alpha + \sum \limits_{k=1}^K \beta_k y_{n-k} + \epsilon_n
+\end{equation}
+
+where $\alpha$ is a constant, $\beta_1, \ldots, \beta_K$ are the parameters of the $AR(K)$ model, and $\{\epsilon_n\}$ is assumed to be a white noise series with mean $0$ and variance $\sigma^2$.
+
+\section{Probability Model}
+
+Here we use an improper prior for $\alpha, \beta, and \sigma$ to illustrate the idea. A weakly informative prior or informative prior could be added if more knowledge of the parameters is available.
+
+The probability model for this $AR(K)$ model is described as:
+\begin{align*}
+y_n &\sim \mathrm{Normal}\left( \mu_n, \sigma \right) \\
+\mu_n &= \alpha + \sum \limits_{k=1}^K \beta_k y_{n-k} \\
+\alpha &\sim \mathrm{Uniform}\left( -\infty,\infty \right) \\
+\beta &\sim \mathrm{Uniform}\left( -\infty,\infty \right) \\
+\sigma &\sim \mathrm{Uniform}\left( 0,\infty \right)
+\end{align*}
+
+\end{document}
