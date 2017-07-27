@@ -9,7 +9,7 @@ beta <- rnorm(1, 0.5, 2) # generate a random coefficient that we will try to rec
 sigma <- 4 # scale parameter for the residual
 y <- vector(mode = "numeric", length = N)
 for(n in 1:N){
-  y[n] <- rnorm(1, alpha + X[n]*beta, sigma)
+  y[n] <- rnorm(1, alpha + x[n]*beta, sigma)
 }
 
 simData <- data.frame(observation = 1:N, x = x, y = y)
