@@ -1,0 +1,66 @@
+\documentclass[12pt]{article}
+
+\usepackage[top=1in, bottom=1in, left=1in, right=1in]{geometry}
+\usepackage{amsfonts}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\setlength\parindent{0pt}
+\setlength{\parskip}{1em}
+\begin{document}
+
+\title{Probability Model For An ARCH(m) Model}
+\author{Nan Wu \\ nanw@udel.edu}
+\date{}
+\maketitle
+
+\section{ARCH(m) Model}
+
+Asset volatility is perhaps the most commonly used risk measure in finance \cite{tsay2014introduction}. It has some characteristics that are commonly seen in asset returns \cite{tsay2014introduction} such as: 1) Volatility evolves over time in a continuous manner; 2) Volatility is often an stationary process; etc. which are important in volatility modeling.
+
+Let $r_t$ be the log return of an asset at time $t$. $\{r_t\}$ is either serially uncorrelated or with minor lower order serial correlations, but it is a dependent series. Let $F_{t-1}$ denote the information available at time $t-1$, the conditional mean of asset return $\mu_t = E\left(r_t \left| F_{t-1} \right.\right)$ could be modeled as following a stationary $\text{ARMA}(p,q)$ model. Here, we assume $\mu_t = \mu$, a constant, for simplicity but without losing generality when discussing the ARCH model. The conditional standard deviation $\sigma_t$ of $r_t$ is the volatility to be modeled that $\sigma_t^2 = \text{Var}\left(r_t \left|F_{t-1}\right.\right)$. Therefore we have
+\begin{gather}
+  r_t = \mu + a_t \\
+  \sigma_t^2 = \text{Var}\left(r_t \left|F_{t-1}\right.\right) 
+           = \text{Var}\left(a_t \left|F_{t-1}\right.\right)
+\end{gather}
+where $a_t$ is referred to as the shock of an asset return at time $t$.
+
+There are different conditional heteroscedastic models that use different dynamic equations to govern the time evolution of the conditional variance $\sigma_t^2$ of the asset return.
+
+The ARCH model of Engle \cite{engle1982} is the first model that provides a systematic framework for volatility modeling.
+
+An $\text{ARCH}(K)$ model is defined as
+\begin{gather}
+  a_t = \sigma_t\epsilon_t \\
+  \sigma_t^2 = \alpha_0 + \sum \limits_{k=1}^K \alpha_k a_{t-k}^2
+\end{gather}
+where $\{\epsilon_t\}$ is a sequence of iid standard normal random variables, $\alpha_0>0$, and $\alpha_i \ge 0$ for all $i>0$. To ensure stationarity of the time series, $\sum \limits_{k=1}^K \alpha_k < 1$.
+
+The unconditional mean and variance of $a_t$ can be obtained as
+\begin{gather}
+  E\left(a_t\right) = E\left[E\left(a_t \left| F_{t-1}\right.\right)\right] = E\left[\sigma_t E\left(\epsilon_t\right)\right] =0 \\
+  \text{Var}\left(a_t\right) = \frac{\alpha_0}{1-\sum \limits_{k=1}^K \alpha_k}
+\end{gather}
+Given $\epsilon_t \sim N(0,1)$, we have
+\begin{align}
+  a_t\left|\left\{\mu, \alpha_0, \alpha_1, \ldots, \alpha_K, r_{t-1}, \ldots, r_{t-K}\right\}\right. &\sim N\left(0,\sigma_t\right)\\
+  r_t\left|\left\{\mu, \alpha_0, \alpha_1, \ldots, \alpha_K, r_{t-1}, \ldots, r_{t-K}\right\}\right. &\sim N\left(\mu,\sigma_t\right)
+\end{align}
+\section{Probability Model}
+
+Here we use an improper prior for $\mu$ and $\alpha_k, k=0,\ldots, K$ to illustrate the idea. A weakly informative prior or informative prior could be added if more knowledge of the parameters is available.
+
+The probability model for this $\text{ARCH}(K)$ model is described as (we dropped the condition for likelihood for simplicity):
+\begin{align*}
+  r_t &\sim \mathrm{Normal}\left( \mu, \sigma_t \right) \\
+  \sigma_t^2 &= \alpha_0 + \sum \limits_{k=1}^K \alpha_k a_{t-k}^2 \\
+  a_{t-k} &= r_{t-k} - \mu \\  
+  \mu &\sim \mathrm{Uniform}\left( -\infty,\infty \right) \\
+  \alpha_0 &\sim \mathrm{Uniform}\left( 0,\infty \right) \\
+  \alpha_k &\sim \mathrm{Uniform}\left( 0, 1-\sum \limits_{j=1,j\neq k}^K \alpha_j \right) \\
+  k &= 1,\ldots, K
+\end{align*}
+\bibliographystyle{ieeetr}
+\bibliography{archref}
+\end{document}
