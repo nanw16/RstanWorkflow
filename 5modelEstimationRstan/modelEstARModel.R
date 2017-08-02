@@ -20,7 +20,7 @@ reg_dat <- list(N = nrow(simData), K = simData$K[1], y = simData$y)
 
 fitARModel = stan(
   file = file.path(stanDir, "ARModel.stan"), data = reg_dat,
-  iter = 20000, chains = 4, thin = 10, seed = 123)
+  iter = 20000, chains = 4, thin = 10)
 
 # Check the summary for the parameters of the model and the log-posterior
 print(fitARModel)
